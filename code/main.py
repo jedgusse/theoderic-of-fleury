@@ -51,14 +51,14 @@ PARAMETERS
 sample_len = 1300 # length of sample / segment
 n_feats = 350 # number of features taken in to account
 ignore_words = [] # Words in list will be ignored in analysis
-list_of_function_words = open('/Users/jedgusse/compstyl/params/fword_list.txt').read().split() # Loads manual list of function words
+list_of_function_words = open('params/fword_list.txt').read().split() # Loads manual list of function words
 
 """
 GENERAL CLASSES AND FUNCTIONS
 """
 def enclitic_split(input_str):
 	# Feed string, returns lowercased text with split enclitic -que
-	que_list = open("/Users/jedgusse/compstyl/params/que_list.txt").read().split()
+	que_list = open("params/que_list.txt").read().split()
 	spaced_text = []
 	for word in input_str.split():
 		word = "".join([char for char in word if char not in punctuation]).lower()
@@ -376,7 +376,7 @@ class Phase_One:
 		self.folder_location = folder_location
 
 	def go(self):
-		results_file = open('/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/results/results.txt', 'a')
+		results_file = open('results.txt', 'a')
 
 		sample_len_loop = list(range(50, 1350, 25))
 		# feat_type_loop = ['raw_fwords','raw_MFW','raw_4grams','tfidf_fwords','tfidf_MFW','tfidf_4grams']
@@ -579,7 +579,7 @@ class Phase_One:
 							sys.exit("ERROR: Inconsistent number of features: {} against {}".format(str(n_feats),str(len(features))))
 
 						model_name = '{}-{}feats-{}w-c{}-model'.format(feat_type, str(n_feats), str(sample_len), str(best_c_param))
-						model_location = '/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/results/models/{}-{}feats-{}w-c{}-model'.format(feat_type, str(n_feats), str(sample_len), str(best_c_param))
+						model_location = 'results/models/{}-{}feats-{}w-c{}-model'.format(feat_type, str(n_feats), str(sample_len), str(best_c_param))
 						pickle.dump(grid, open(model_location, 'wb'))
 
 						accuracy = grid.cv_results_['mean_test_accuracy_score'][0]
@@ -609,7 +609,7 @@ class Plot_Lowess:
 
 	def plot(self):
 
-		results_location = open('/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/results/results.txt')
+		results_location = open('results/results.txt')
 		sample_len_loop = list(range(50, 1350, 25))
 
 		x = sample_len_loop
@@ -648,7 +648,7 @@ class Plot_Lowess:
 		plt.tight_layout()
 		plt.show()
 
-		fig.savefig("/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/figs/sample_len_accuracy.pdf", \
+		fig.savefig("figs/sample_len_accuracy.pdf", \
 					transparent=True, format='pdf')
 
 class PrinCompAnal:
@@ -693,10 +693,6 @@ class PrinCompAnal:
 		print("Number of words: ", len(features))
 		print("Sample size : ", sample_len)
 		
-		# Line that calls font (for doctoral thesis lay-out)
-		# Custom fonts should be added to the matplotlibrc parameter file: cd '/Users/jedgusse/.matplotlib'.
-		# Make sure the font is in the font "library" (not just font book!)
-		# Documentation on changing font (matplotlibrc params): http://www.claridgechang.net/blog/how-to-use-custom-fonts-in-matplotlib
 
 		rcParams['font.family'] = 'sans-serif'
 		rcParams['font.sans-serif'] = ['Bodoni 72']
@@ -730,21 +726,7 @@ class PrinCompAnal:
 			abbrev = title.split('_')[0].split('-')
 			abbrev = '.'.join([w[:3] for w in abbrev]) + '-' + sample_number
 
-			if full_title in ['Consuetudines-Floriacensis', 'Illatio-s-Benedictum-Floriacum', 'Inventio-Celsi', 'Miracula-Celsi', 'Only-Autobiogr', 'Passio-SS-Tryphonis-et-Resp', 'Sermo-de-Celso', 'Sermo-de-festivitate-sancti-Eucharii', 'Vita-Deicoli', 'Vita-S-Reginswindis', 'Vita-sancti-Firmani-posterior', 'Vita-sancti-Martini-papae', 'Vita-sancti-Severi']:
-				ax.scatter(p1, p2, p3, marker='o', color='k', \
-					s=markersize, zorder=3, alpha=customized_alpha['Theodericus-Floriacensis'])
-				# ax.text(p1+0.5, p2+0.5, p3+0.5, abbrev, color='black', fontdict={'size': 6}, zorder=1)
-			elif full_title in ['Passio-Anthimi', 'Prologus-Argumentum', 'test']:
-				ax.scatter(p1, p2, p3, marker='o', color='w', \
-					s=180, zorder=1000, alpha=0.7)
-				ax.scatter(p1, p2, p3, marker='^', color='w', \
-					s=50, zorder=1001)
-				ax.scatter(p1, p2, p3, marker='^', color='k', \
-					s=markersize, zorder=1002)
-				ax.arrow(p1, p2, p1+5, p2+5)
-			else:
-				ax.scatter(p1, p2, p3, marker='o', color='k', \
-					s=markersize, zorder=3, alpha=customized_alpha[a])
+			ax.scatter(p1, p2, p3, marker='o', color='k', s=markersize, zorder=3, alpha=customized_alpha[a])
 
 			# shingled, block of code for Bede the Venerable comparison
 
@@ -768,8 +750,7 @@ class PrinCompAnal:
 		plt.tight_layout()
 		plt.show()
 
-		fig.savefig("/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/figs/pca.png", \
-					dpi=300, transparent=True, format='png')
+		fig.savefig("figs/pca.png", dpi=300, transparent=True, format='png')
 
 class Measure_Lexical_Diversity:
 	"""
@@ -882,8 +863,7 @@ class t_SNE:
 		plt.tight_layout()
 		plt.show()
 		
-		fig.savefig("/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/figs/t-SNE.png", \
-					dpi=300, transparent=True, format='png')
+		fig.savefig("figs/t-SNE.png", dpi=300, transparent=True, format='png')
 
 class DBS:
 	"""
@@ -936,8 +916,7 @@ class DBS:
 
 		plt.show()
 
-		fig.savefig("/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/figs/DBScan.png", \
-					dpi=300, transparent=True, format='png')
+		fig.savefig("figs/DBScan.png", dpi=300, transparent=True, format='png')
 
 """
 PHASE ONE
@@ -945,10 +924,9 @@ Use contrastive corpus consisting of authors Jean de Saint-Arnoul, Adso of Monti
 Finding optimal combination of parameters and visualizing results in scenario when 3 authors are compared
 """
 
-folder_location = '/Users/jedgusse/Documents/UGent - Lokaal/Publicaties/Vanderputten — Theoderich von Fleury/corpus/visualize'
+folder_location = ''
 # Phase_One.go(folder_location) # uncomment to run
 
-# results_location = '/Users/jedgusse/Documents/UGent/Publicaties/Vanderputten — Theoderich von Fleury/results/results.txt'
 # Plot_Lowess(results_location) # uncomment to run
 
 """
@@ -957,10 +935,6 @@ Apply PCA with optimal parameters
 """
 
 PrinCompAnal.plot(folder_location) # uncomment to run
-
-# Custom fonts should be added to the matplotlibrc parameter file: cd '/Users/jedgusse/.matplotlib'.
-# Make sure the .ttf file is copied to "/Library/Fonts" (do not just keep in the app Font Book)
-# Follow documentation on changing font (matplotlibrc params): http://www.claridgechang.net/blog/how-to-use-custom-fonts-in-matplotlib
 
 rcParams['font.family'] = 'sans-serif'
 rcParams['font.sans-serif'] = ['Bodoni 72'] # Font of Revue Mabillon
