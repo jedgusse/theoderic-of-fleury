@@ -891,8 +891,8 @@ class DBS:
 
 		# #############################################################################
 		# Compute DBSCAN
-
 		# epsilon range or 𝜖 indicates predefined distance around each point, (decisive whether core, border or noise point)
+		
 		eps = 0.46
 		min_samples = len(X)
 
